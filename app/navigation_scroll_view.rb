@@ -1,5 +1,5 @@
 class NavigationScrollView < UIScrollView
-  attr_accessor :starting_y_position, :parent
+  attr_accessor :starting_y_position
 
   NAVIGATION_HEIGHT  = 300
   BUTTON_SIDE_LENGTH = 100
@@ -89,36 +89,30 @@ class NavigationScrollView < UIScrollView
     contentOffset.y === NAVIGATION_HEIGHT
   end
 
-  def dim_superview
-    animate_parent_background_color(UIColor.grayColor)
-  end
-
-  def undim_superview
-    animate_parent_background_color(UIColor.whiteColor)
-  end
-
-  def animate_parent_background_color(color)
-    UIView.animateWithDuration(0.5, animations: lambda {
-      parent_view.backgroundColor = color if parent
-    })
-  end
-
-  def parent_view
-    parent.view
-  end
-
   def move_navigation_up
-    move_to_offset(CGPointMake(0, NAVIGATION_HEIGHT))
+    duration = 0.5
+    info     = { duration: duration }
+
+    post_notification('NavigationWillMoveUp')
+    move_to_offset(CGPointMake(0, NAVIGATION_HEIGHT), duration: duration)
   end
 
   def move_navigation_down
-    move_to_offset(CGPointMake(0, 0))
+    duration = 0.5
+    info     = { duration: duration }
+
+    post_notification('NavigationWillMoveDown')
+    move_to_offset(CGPointMake(0, 0), duration: duration)
   end
 
-  def move_to_offset(offset)
-    UIView.animateWithDuration(0.5, animations: lambda {
+  def move_to_offset(offset, duration: duration)
+    UIView.animateWithDuration(duration, animations: lambda {
       UIView.setAnimationCurve(UIViewAnimationCurveEaseOut)
       self.contentOffset = offset
     })
+  end
+
+  def post_notification(notification, object = self, info = nil)
+    NSNotificationCenter.defaultCenter.postNotificationName(notification, object: object, userInfo: info)
   end
 end
