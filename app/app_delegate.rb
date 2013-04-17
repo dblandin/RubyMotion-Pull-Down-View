@@ -2,7 +2,7 @@ class AppDelegate
   def application(application, didFinishLaunchingWithOptions:launchOptions)
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
 
-    view = ViewController.alloc.initWithNibName(nil, bundle: nil)
+    view = ContainerViewController.alloc.init
 
     @window.rootViewController = view
     @window.makeKeyAndVisible

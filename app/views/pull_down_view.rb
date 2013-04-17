@@ -1,4 +1,4 @@
-class NavigationScrollView < UIScrollView
+class PullDownView < UIScrollView
   attr_accessor :starting_y_position
 
   NAVIGATION_HEIGHT  = 300
@@ -20,6 +20,22 @@ class NavigationScrollView < UIScrollView
     addSubview(handle)
 
     self
+  end
+
+  def move_navigation_up
+    duration = 0.5
+    info     = { duration: duration }
+
+    post_notification('NavigationWillMoveUp', info)
+    move_to_offset(CGPointMake(0, NAVIGATION_HEIGHT), duration: duration)
+  end
+
+  def move_navigation_down
+    duration = 0.5
+    info     = { duration: duration }
+
+    post_notification('NavigationWillMoveDown', info)
+    move_to_offset(CGPointMake(0, 0), duration: duration)
   end
 
   def hitTest(point, withEvent: event)
@@ -54,7 +70,7 @@ class NavigationScrollView < UIScrollView
 
   def label
     @_label ||= UILabel.alloc.initWithFrame(CGRectMake(0, 0, 200, 60)).tap do |label|
-      label.text          = 'Navigation'
+      label.text          = 'Pull Down View'
       label.textColor     = UIColor.blackColor
       label.center        = CGPointMake(scroll_view_width / 2, NAVIGATION_HEIGHT / 2)
       label.textAlignment = UITextAlignmentCenter
@@ -89,22 +105,6 @@ class NavigationScrollView < UIScrollView
     contentOffset.y === NAVIGATION_HEIGHT
   end
 
-  def move_navigation_up
-    duration = 0.5
-    info     = { duration: duration }
-
-    post_notification('NavigationWillMoveUp')
-    move_to_offset(CGPointMake(0, NAVIGATION_HEIGHT), duration: duration)
-  end
-
-  def move_navigation_down
-    duration = 0.5
-    info     = { duration: duration }
-
-    post_notification('NavigationWillMoveDown')
-    move_to_offset(CGPointMake(0, 0), duration: duration)
-  end
-
   def move_to_offset(offset, duration: duration)
     UIView.animateWithDuration(duration, animations: lambda {
       UIView.setAnimationCurve(UIViewAnimationCurveEaseOut)
@@ -112,7 +112,7 @@ class NavigationScrollView < UIScrollView
     })
   end
 
-  def post_notification(notification, object = self, info = nil)
+  def post_notification(notification, info = nil, object = self)
     NSNotificationCenter.defaultCenter.postNotificationName(notification, object: object, userInfo: info)
   end
 end
