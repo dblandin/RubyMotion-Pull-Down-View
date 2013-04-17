@@ -10,7 +10,6 @@ class ContentViewController < UIViewController
   def add_subviews
     view.addSubview(label)
     view.addSubview(button)
-    view.addSubview(overlay_view)
   end
 
   def label
@@ -28,10 +27,6 @@ class ContentViewController < UIViewController
       button.sizeToFit
       button.center = CGPointMake(viewport_width / 2, viewport_height / 2 + 100)
     end
-  end
-
-  def overlay_view
-    @_overlay_view ||= OverlayView.alloc.initWithFrame(view.bounds)
   end
 
   def viewport_size

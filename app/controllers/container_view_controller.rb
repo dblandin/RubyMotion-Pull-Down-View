@@ -1,6 +1,4 @@
 class ContainerViewController < UIViewController
-  attr_accessor :observers
-
   BUTTON_SIDE_LENGTH = 100
 
   def viewDidLoad
@@ -11,55 +9,17 @@ class ContainerViewController < UIViewController
     self.addChildViewController(content_view_controller)
     view.addSubview(content_view_controller.view)
 
-    self.observers = []
-
-    view.addSubview(pull_down_view)
     view.addSubview(bottom_left_button)
+    view.addSubview(overlay_view)
+    view.addSubview(pull_down_view)
   end
 
   def content_view_controller
     @_content_view_controller ||= ContentViewController.alloc.init
   end
 
-  def viewWillAppear(animated)
-    add_observer('NavigationWillMoveDown') do |notification|
-      disable_controls
-    end
-
-    add_observer('NavigationWillMoveUp') do |notification|
-      enable_controls
-    end
-  end
-
-  def viewWillDisappear(animated)
-    observers.each { |observer| notification_center.removeObserver(observer) }
-  end
-
-  def add_observer(name, &block)
-    observers << notification_center.addObserverForName(name,
-                                                        object: nil,
-                                                        queue: main_notification_queue,
-                                                        usingBlock: block)
-  end
-
-  def enable_controls
-    controls_to_disable.each { |control| control.enabled = true }
-  end
-
-  def disable_controls
-    controls_to_disable.each { |control| control.enabled = false }
-  end
-
-  def controls_to_disable
-    [bottom_left_button]
-  end
-
-  def notification_center
-    NSNotificationCenter.defaultCenter
-  end
-
-  def main_notification_queue
-    NSOperationQueue.mainQueue
+  def overlay_view
+    @_overlay_view ||= OverlayView.alloc.initWithFrame(view.bounds)
   end
 
   def pull_down_view

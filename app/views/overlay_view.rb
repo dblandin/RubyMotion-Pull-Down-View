@@ -19,7 +19,7 @@ class OverlayView < UIView
   end
 
   def undimWithDuration(duration)
-    animate_alpha(0.0, duration: duration, lambda { |finished| self.hidden = true })
+    animate_alpha(0.0, duration, lambda { |finished| self.hidden = true })
   end
 
   def remove_observers
