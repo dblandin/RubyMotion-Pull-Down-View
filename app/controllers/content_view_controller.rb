@@ -2,6 +2,7 @@ class ContentViewController < UIViewController
   def viewDidLoad
     super
 
+    view.frame           = UIScreen.mainScreen.bounds
     view.backgroundColor = UIColor.whiteColor
 
     add_subviews

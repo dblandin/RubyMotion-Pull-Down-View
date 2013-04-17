@@ -4,11 +4,12 @@ class ContainerViewController < UIViewController
   def viewDidLoad
     super
 
-    view.backgroundColor = UIColor.whiteColor
+    view.frame           = UIScreen.mainScreen.bounds
+    view.backgroundColor = UIColor.clearColor
 
-    self.addChildViewController(content_view_controller)
+    addChildViewController(content_view_controller)
+
     view.addSubview(content_view_controller.view)
-
     view.addSubview(bottom_left_button)
     view.addSubview(overlay_view)
     view.addSubview(pull_down_view)
@@ -19,7 +20,7 @@ class ContainerViewController < UIViewController
   end
 
   def overlay_view
-    @_overlay_view ||= OverlayView.alloc.initWithFrame(view.bounds)
+    @_overlay_view ||= OverlayView.alloc.initWithFrame(UIScreen.mainScreen.bounds)
   end
 
   def pull_down_view
